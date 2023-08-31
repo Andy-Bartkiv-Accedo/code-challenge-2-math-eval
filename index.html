@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>ACC: 2-math evaluation</title>
+</head>
+<body>
+    <div class = "container">
+      <div class="header">
+        <div class="header-left">
+          <img src="https://assets-global.website-files.com/63c597ccd1518e710eed86ef/63d08f18a92322af5d404c47_Colour.webp" loading="lazy" alt="accedo logo" class="desktop-logo">
+          <span>code challenge</span>
+        </div>
+        <div class="header-right">
+          <span>2 - math evaluation </span>
+        </div>
+      </div>
+      <div class="inner-container">
+        <div class="test-container">
+          <div class="tag-wrap">
+            <div class="inner-tag">
+              TEST CASES
+            </div>
+            <div class="btn-custom-test test-all-cases" id="calc-all">
+              calc all
+            </div>
+          </div>
+        </div>
+        <div class="code-container">
+          <pre>
+            <code>
+const calc = function (expression) {
+  const DM = "/*", AS = "+-";
+  expression = expression.replace(/ /g,"")
+    .replace(/--/g, "+").replaceAll("++", "+");
+
+  const arithMagic = (num, mathOp) => {
+    switch (mathOp) {
+      case "/": return num[0] / num[1];
+      case "*": return num[0] * num[1];
+      case "+": return num[0] + num[1];
+      case "-": return num[0] - num[1];
+    };
+  };
+  const getClosingParIndex = (str, parIdx) => {
+    let lvl = 0;
+    for (let i = parIdx+1; i < str.length; i++) {
+      if (str[i] === "(") {
+        lvl++;
+      } else if (str[i] === ")") {
+        if (lvl === 0) return i;
+        else lvl--;
+      }
+    }
+    return null;
+  };
+  
+  let openParIndex = expression.indexOf("(");
+  if (openParIndex >= 0) {
+    let closingParIndex = getClosingParIndex(expression, openParIndex);
+    if (closingParIndex) {
+      let strBefore = expression.slice(0, openParIndex);
+      let strInside = expression.slice(openParIndex + 1, closingParIndex);
+      let strAfter = expression.slice(closingParIndex + 1);
+      return calc(strBefore + calc(strInside) + strAfter);
+    } else {
+      return "NaN";
+    }
+  }
+
+  let mathOp = expression.split("").findLast(char => AS.includes(char));
+  let mathOpIndex = expression.lastIndexOf(mathOp);
+  if ((DM+AS).includes(expression[mathOpIndex-1])) {
+    mathOp = expression[mathOpIndex-1];
+    mathOpIndex = mathOpIndex-1;
+  }
+  if (!mathOp || mathOpIndex === 0) {
+    mathOp = DM.split("").findLast(mo => expression.includes(mo));
+    mathOpIndex = expression.lastIndexOf(mathOp);
+  }
+  
+  if (!mathOp || mathOpIndex === 0) {
+    return +expression;
+  } else {
+    let numbers = [
+      expression.slice(0, mathOpIndex), 
+      expression.slice(mathOpIndex + 1)
+    ].map(str => calc(str));
+    return arithMagic(numbers, mathOp);
+  }
+};</code>
+          </pre>
+        </div>
+      </div>
+    </div>
+    
+    <script src="calc.js"></script>
+    <script src="testcases.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
