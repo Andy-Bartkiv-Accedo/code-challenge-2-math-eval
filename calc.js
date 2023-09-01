@@ -26,6 +26,7 @@ const calc = function (expression) {
     }
     return null;
   }
+  console.log("expression", expression);
   
   // handling parenthesis with a recursion
   let openParIndex = expression.indexOf("(");
@@ -67,7 +68,7 @@ const calc = function (expression) {
     let numbers = [
       expression.slice(0, mathOpIndex), 
       expression.slice(mathOpIndex + 1)
-    ].map(str => calc(str));
+    ].map(str => isNaN(+str) ? calc(str) : +str);
     return arithMagic(numbers, mathOp);
   }
 };
