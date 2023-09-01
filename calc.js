@@ -26,7 +26,6 @@ const calc = function (expression) {
     }
     return null;
   }
-  console.log("expression", expression);
   
   // handling parenthesis with a recursion
   let openParIndex = expression.indexOf("(");
